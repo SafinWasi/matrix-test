@@ -1,7 +1,9 @@
 const fs = require("fs");
-sdk = require("matrix-bot-sdk");
-MatrixClient = sdk.MatrixClient;
-SimpleFsStorageProvider = sdk.SimpleFsStorageProvider;
+const sdk = require("matrix-bot-sdk");
+const MatrixClient = sdk.MatrixClient;
+const SimpleFsStorageProvider = sdk.SimpleFsStorageProvider;
+
+const trigger = "+";
 
 class TestingBot {
 	constructor(homeserverUrl, accessToken) {
@@ -34,12 +36,15 @@ class TestingBot {
             		"msgtype": "m.notice",
             		"body": replyText,
         		});
-    		} else if (body.startsWith("!die")) {
-				console.log("Goodbye!");
-				process.exit(0);
+			} else if (body.startsWith(trigger)) {
+				client.sendMessage(roomId, {
+					"msgtype": "m.notice",
+					"body": "Oh look, a trigger!"
+				});
 			}
 	}
 }
+
 
 function read() {
 	fs.readFile('./config.json', 'utf8', (err, jsonString) => {
